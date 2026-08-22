@@ -38,3 +38,7 @@ management:
     web:
       exposure:
         include: "*"
+
+gateway:
+  security:
+    api-key: oms-secret-key-2026

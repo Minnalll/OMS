@@ -1,5 +1,6 @@
 package com.oms.gateway.config;
 
+import com.oms.gateway.filter.ApiKeyGatewayFilterFactory;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
@@ -9,26 +10,32 @@ import org.springframework.context.annotation.Configuration;
 public class GatewayRouteConfig {
 
     @Bean
-    public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
+    public RouteLocator customRoutes(
+            RouteLocatorBuilder builder,
+            ApiKeyGatewayFilterFactory apiKeyFilter) {
 
         return builder.routes()
 
-                // Auth Service
-               /* .route("auth-service", route -> route
+                .route("auth-service", r -> r
                         .path("/auth/**")
-                        .uri("lb://AUTH-SERVICE"))*/
+                        .filters(f -> f.filter(apiKeyFilter.apply(
+                                new ApiKeyGatewayFilterFactory.Config())))
+                        .uri("lb://AUTHSERVICE"))
 
-                // Product Service
-                .route("product-service", route -> route
+                .route("product-service", r -> r
                         .path("/products/**")
+                        .filters(f -> f.filter(apiKeyFilter.apply(
+                                new ApiKeyGatewayFilterFactory.Config())))
                         .uri("lb://PRODUCTSERVICE"))
 
-                // Order Service
-                .route("order-service", route -> route
+                .route("order-service", r -> r
                         .path("/orders/**")
+                        .filters(f -> f.filter(apiKeyFilter.apply(
+                                new ApiKeyGatewayFilterFactory.Config())))
                         .uri("lb://ORDERSERVICE"))
 
                 .build();
+
     }
 
 }
