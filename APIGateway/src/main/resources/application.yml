@@ -1,0 +1,40 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: APIGateway
+
+
+  cloud:
+    gateway:
+      server:
+        webflux:
+          discovery:
+            locator:
+              enabled: true
+              lower-case-service-id: true
+
+#          routes:
+#            - id: product-service
+#              uri: lb://PRODUCTSERVICE
+#              predicates:
+#                - Path=/products/**
+#
+#            - id: order-service
+#              uri: lb://ORDERSERVICE
+#              predicates:
+#                - Path=/orders/**
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
