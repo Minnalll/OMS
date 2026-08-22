@@ -6,7 +6,7 @@ public final class GatewayConstants {
 
     public static final String API_KEY_HEADER = "X-API-KEY";
 
-    // Move to Vault/Config Server later
-    public static final String API_KEY = "oms-secret-key-2026";
+   /* // Move to Vault/Config Server later
+    public static final String API_KEY = "oms-secret-key-2026";*/
 
 }

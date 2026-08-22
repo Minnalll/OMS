@@ -1,5 +1,6 @@
 package com.oms.gateway.filter;
 
+import com.oms.gateway.config.GatewaySecurityProperties;
 import com.oms.gateway.constant.GatewayConstants;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
@@ -13,8 +14,11 @@ import java.nio.charset.StandardCharsets;
 public class ApiKeyGatewayFilterFactory
         extends AbstractGatewayFilterFactory<ApiKeyGatewayFilterFactory.Config> {
 
-    public ApiKeyGatewayFilterFactory() {
+    private final GatewaySecurityProperties gatewaySecurityProperties;
+
+    public ApiKeyGatewayFilterFactory(GatewaySecurityProperties gatewaySecurityProperties) {
         super(Config.class);
+        this.gatewaySecurityProperties = gatewaySecurityProperties;
     }
 
     @Override
@@ -27,17 +31,12 @@ public class ApiKeyGatewayFilterFactory
                     .getFirst(GatewayConstants.API_KEY_HEADER);
 
             if (apiKey == null || apiKey.isBlank()) {
-
                 return unauthorized(exchange,
                         "API Key is missing.");
-
             }
 
-            if (!GatewayConstants.API_KEY.equals(apiKey)) {
-
-                return unauthorized(exchange,
-                        "Invalid API Key.");
-
+            if (!gatewaySecurityProperties.getApiKey().equals(apiKey)) {
+                return unauthorized(exchange, "Invalid API Key.");
             }
 
             return chain.filter(exchange);
@@ -51,8 +50,7 @@ public class ApiKeyGatewayFilterFactory
 
         exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
 
-        exchange.getResponse().getHeaders()
-                .setContentType(MediaType.APPLICATION_JSON);
+        exchange.getResponse().getHeaders().setContentType(MediaType.APPLICATION_JSON);
 
         String json = """
                 {
