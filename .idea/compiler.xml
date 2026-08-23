@@ -10,6 +10,15 @@
         <module name="DiscoveryServer" />
         <module name="APIGateway" />
       </profile>
+      <profile name="Annotation profile for AuthService" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.46/lombok-1.18.46.jar" />
+        </processorPath>
+        <module name="AuthService" />
+      </profile>
       <profile name="Annotation profile for ProductService" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
@@ -23,13 +32,16 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="APIGateway (1)" target="17" />
       <module name="APIGatewayOld" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="APIGateway" options="-parameters" />
+      <module name="APIGateway (1)" options="-parameters" />
       <module name="APIGatewayOld" options="-parameters" />
+      <module name="AuthService" options="-parameters" />
       <module name="DiscoveryServer" options="-parameters" />
       <module name="OrderService" options="-parameters" />
       <module name="ProductService" options="-parameters" />
