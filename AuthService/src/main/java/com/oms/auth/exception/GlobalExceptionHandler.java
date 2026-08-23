@@ -29,4 +29,23 @@ public class GlobalExceptionHandler {
 
     }
 
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<Map<String,Object>> handleInvalidCredentials(
+
+            InvalidCredentialsException ex){
+
+        Map<String,Object> response = new HashMap<>();
+
+        response.put("status",401);
+
+        response.put("message",ex.getMessage());
+
+        response.put("timestamp",LocalDateTime.now());
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+
+                .body(response);
+
+    }
+
 }

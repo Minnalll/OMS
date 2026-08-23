@@ -25,6 +25,6 @@ eureka:
       defaultZone: http://localhost:8761/eureka/
 
 jwt:
-  secret: ThisIsA256BitSecretKeyForOMSApplication2026
+  secret: 6pA9qM8xL2vR5nT7uW1yZ4cF8hJ3kN6sQ0eD2gH9mP7xB4rV8sN5dK1qL7mX2aH9jF
   access-token-expiration: 3600000
   refresh-token-expiration: 604800000
