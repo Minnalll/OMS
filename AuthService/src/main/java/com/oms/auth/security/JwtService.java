@@ -12,6 +12,19 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 import com.oms.auth.properties.JwtProperties;
 
+import org.springframework.stereotype.Service;
+
+import com.oms.auth.properties.JwtProperties;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
+
+
 @Service
 public class JwtService {
 
@@ -47,7 +60,6 @@ public class JwtService {
                 .compact();
 
     }
-
     public String generateAccessToken(
             String username,
             Map<String, Object> claims) {
@@ -73,7 +85,6 @@ public class JwtService {
                 .compact();
 
     }
-
     public String generateRefreshToken(String username) {
 
         return Jwts.builder()
@@ -95,7 +106,6 @@ public class JwtService {
                 .compact();
 
     }
-
     public String extractUsername(String token) {
 
         return extractClaim(
@@ -107,7 +117,6 @@ public class JwtService {
         );
 
     }
-
     public <T> T extractClaim(
 
             String token,
@@ -133,7 +142,6 @@ public class JwtService {
                 .getPayload();
 
     }
-
     public Date extractExpiration(String token) {
 
         return extractClaim(
@@ -145,7 +153,6 @@ public class JwtService {
         );
 
     }
-
     public boolean isTokenExpired(String token) {
 
         return extractExpiration(token)
@@ -153,7 +160,6 @@ public class JwtService {
                 .before(new Date());
 
     }
-
     public boolean validateToken(
 
             String token,
@@ -169,7 +175,5 @@ public class JwtService {
                 && !isTokenExpired(token);
 
     }
-
-
 
 }
