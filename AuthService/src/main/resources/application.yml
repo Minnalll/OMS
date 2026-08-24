@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: AUTH-SERVICE
+    name: AUTHSERVICE
 
   datasource:
     url: jdbc:mysql://localhost:3306/oms

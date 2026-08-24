@@ -33,6 +33,10 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
 
+auth:
+  service:
+    url: http://AUTHSERVICE
+
 management:
   endpoints:
     web:
