@@ -10,4 +10,6 @@ public interface AuthService {
 
     RefreshTokenResponse refreshToken(RefreshTokenRequest request);
 
+    ValidationResponse validateToken(String token);
+
 }

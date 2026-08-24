@@ -40,4 +40,24 @@ public class AuthController {
         return ResponseEntity.ok(authService.refreshToken(request));
     }
 
+    @GetMapping("/validate")
+    public ResponseEntity<ValidationResponse> validateToken(@RequestHeader(value = "Authorization", required = false)
+            String authorizationHeader) {
+
+        if (authorizationHeader == null ||
+                !authorizationHeader.startsWith("Bearer ")) {
+            return ResponseEntity.badRequest()
+                    .body(
+                            ValidationResponse.builder()
+                                    .valid(false)
+                                    .message("Authorization header missing")
+                                    .build()
+                    );
+        }
+
+        String token = authorizationHeader.substring(7);
+        return ResponseEntity.ok(
+                authService.validateToken(token));
+    }
+
 }
