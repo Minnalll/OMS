@@ -4,6 +4,8 @@ import java.security.Key;
 import java.util.Date;
 import java.util.Map;
 import java.util.function.Function;
+
+import com.oms.auth.model.User;
 import org.springframework.stereotype.Service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -168,6 +170,20 @@ public class JwtService {
 
                 && !isTokenExpired(token);
 
+    }
+
+    public String generateAccessToken(
+            User user) {
+
+        Map<String,Object> claims = new HashMap<>();
+
+        claims.put("role", user.getRole().name());
+
+        claims.put("email", user.getEmail());
+
+        return generateAccessToken(
+                user.getUsername(),
+                claims);
     }
 
 
