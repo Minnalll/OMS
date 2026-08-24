@@ -14,6 +14,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 import com.oms.auth.properties.JwtProperties;
 
+import javax.crypto.SecretKey;
+
 @Service
 public class JwtService {
 
@@ -184,6 +186,46 @@ public class JwtService {
         return generateAccessToken(
                 user.getUsername(),
                 claims);
+    }
+
+    public Claims extractClaims(String token) {
+
+        return Jwts.parser()
+
+                .verifyWith((SecretKey) secretKey)
+
+                .build()
+
+                .parseSignedClaims(token)
+
+                .getPayload();
+
+    }
+
+    public String extractRole(String token) {
+
+        Claims claims = extractClaims(token);
+
+        return claims.get("role", String.class);
+
+    }
+
+    public boolean isValidToken(String token) {
+
+        try {
+
+            extractClaims(token);
+
+            return !isTokenExpired(token);
+
+        }
+
+        catch (Exception ex) {
+
+            return false;
+
+        }
+
     }
 
 

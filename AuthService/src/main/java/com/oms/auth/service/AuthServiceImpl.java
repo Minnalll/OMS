@@ -235,4 +235,48 @@ public class AuthServiceImpl implements AuthService {
 
     }
 
+    @Override
+    public ValidationResponse validateToken(String token) {
+
+        if (token == null || token.isBlank()) {
+
+            return ValidationResponse.builder()
+
+                    .valid(false)
+
+                    .message("Token Missing")
+
+                    .build();
+
+        }
+
+        if (!jwtService.isValidToken(token)) {
+
+            return ValidationResponse.builder()
+
+                    .valid(false)
+
+                    .message("Invalid Token")
+
+                    .build();
+
+        }
+
+        String username = jwtService.extractUsername(token);
+
+        String role = jwtService.extractRole(token);
+
+        return ValidationResponse.builder()
+
+                .valid(true)
+
+                .username(username)
+
+                .role(role)
+
+                .message("Token Valid")
+
+                .build();
+
+    }
 }
