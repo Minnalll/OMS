@@ -2,9 +2,9 @@ package com.productservice.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.AnyDiscriminatorImplicitValues;
 
 import java.math.BigDecimal;
+
 @Getter
 @Setter
 @AllArgsConstructor
