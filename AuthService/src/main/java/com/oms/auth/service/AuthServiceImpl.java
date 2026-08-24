@@ -1,8 +1,8 @@
 package com.oms.auth.service;
 
-import com.oms.auth.dto.LoginRequest;
-import com.oms.auth.dto.LoginResponse;
+import com.oms.auth.dto.*;
 import com.oms.auth.exception.InvalidCredentialsException;
+import com.oms.auth.exception.InvalidRefreshTokenException;
 import com.oms.auth.model.RefreshToken;
 import com.oms.auth.repository.RefreshTokenRepository;
 import com.oms.auth.security.JwtService;
@@ -11,8 +11,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.oms.auth.dto.RegisterRequest;
-import com.oms.auth.dto.RegisterResponse;
 import com.oms.auth.model.User;
 import com.oms.auth.exception.ResourceAlreadyExistsException;
 import com.oms.auth.repository.UserRepository;
@@ -192,6 +190,48 @@ public class AuthServiceImpl implements AuthService {
                         .build();
 
         refreshTokenRepository.save(refreshToken);
+
+    }
+
+    @Override
+    public RefreshTokenResponse refreshToken(
+            RefreshTokenRequest request) {
+
+        RefreshToken refreshToken =
+
+                refreshTokenRepository
+
+                        .findByToken(request.getRefreshToken())
+
+                        .orElseThrow(() ->
+
+                                new InvalidRefreshTokenException(
+                                        "Refresh Token Not Found"));
+
+        if(refreshToken.getExpiryDate()
+                .isBefore(LocalDateTime.now())) {
+
+            throw new InvalidRefreshTokenException(
+                    "Refresh Token Expired");
+
+        }
+
+        User user = refreshToken.getUser();
+
+        String newAccessToken =
+                jwtService.generateAccessToken(user);
+
+        return RefreshTokenResponse.builder()
+
+                .accessToken(newAccessToken)
+
+                .refreshToken(request.getRefreshToken())
+
+                .tokenType("Bearer")
+
+                .expiresIn(3600L)
+
+                .build();
 
     }
 

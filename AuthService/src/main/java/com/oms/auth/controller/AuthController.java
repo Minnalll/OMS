@@ -1,14 +1,11 @@
 package com.oms.auth.controller;
 
-import com.oms.auth.dto.LoginRequest;
-import com.oms.auth.dto.LoginResponse;
+import com.oms.auth.dto.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import com.oms.auth.dto.RegisterRequest;
-import com.oms.auth.dto.RegisterResponse;
 import com.oms.auth.service.AuthService;
 
 import jakarta.validation.Valid;
@@ -36,6 +33,11 @@ public class AuthController {
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
         LoginResponse response = authService.login(request);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<RefreshTokenResponse> refreshToken(@Valid @RequestBody RefreshTokenRequest request){
+        return ResponseEntity.ok(authService.refreshToken(request));
     }
 
 }
