@@ -1,8 +1,10 @@
 package com.orderservice.service;
 
+import com.orderservice.dto.OrderCreatedEvent;
 import com.orderservice.dto.ProductAvailabilityResponse;
 import com.orderservice.exception.ResourceNotFoundException;
 import com.orderservice.feign.ProductFeignClient;
+import com.orderservice.kafka.OrderProducer;
 import com.orderservice.model.Order;
 import com.orderservice.repo.OrderRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,9 @@ public class OrderService {
 
     @Autowired
     private ProductFeignClient productClient;
+
+    @Autowired
+    private OrderProducer producer;
 
     public Order getOrder(Long id) {
         Order order = orderRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Order not found with ID : " + id));
@@ -61,10 +66,19 @@ public class OrderService {
         order.setOrderTimeStamp(LocalDateTime.now());
         order.setOrderStatus("Order Placed");
         order.setCustomerName(System.getProperty("user.name"));
-        Order save = orderRepo.save(order);
+        Order savedOrder = orderRepo.save(order);
 
-        String s = productClient.updateProductAvailability(save.getProductId(), save.getQuantity());
-        System.out.println(s);
+        productClient.updateProductAvailability(savedOrder.getProductId(), savedOrder.getQuantity());
+
+        OrderCreatedEvent event = new OrderCreatedEvent();
+
+        event.setOrderId(savedOrder.getOrderId());
+        event.setProductId(savedOrder.getProductId());
+        event.setQuantity(savedOrder.getQuantity());
+        event.setCustomerName(savedOrder.getCustomerName());
+        event.setOrderStatus(savedOrder.getOrderStatus());
+
+        producer.publish(event);
         return "Order Placed Successfully";
     }
 }
