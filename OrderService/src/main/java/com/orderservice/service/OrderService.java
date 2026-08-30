@@ -76,6 +76,8 @@ public class OrderService {
         event.setProductId(savedOrder.getProductId());
         event.setQuantity(savedOrder.getQuantity());
         event.setCustomerName(savedOrder.getCustomerName());
+        event.setCustomerEmail(savedOrder.getCustomerEmail());
+        event.setCustomerPhone(savedOrder.getCustomerPhone());
         event.setOrderStatus(savedOrder.getOrderStatus());
 
         producer.publish(event);
