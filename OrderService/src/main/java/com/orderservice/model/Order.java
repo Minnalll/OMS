@@ -23,6 +23,8 @@ public class Order {
     private Integer productId;
     private Integer quantity;
     private String customerName;
+    private String customerEmail;
+    private String customerPhone;
     private LocalDateTime orderTimeStamp;
     private String orderStatus;
 }
