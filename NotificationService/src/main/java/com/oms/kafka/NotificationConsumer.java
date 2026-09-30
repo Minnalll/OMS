@@ -23,7 +23,7 @@ public class NotificationConsumer {
     )
     public void consume(OrderCreatedEvent event) {
 
-        System.out.println("Order Event Received");
+        System.out.println("Order Event Received Successfully");
 
         notificationService.saveNotification(event);
 
